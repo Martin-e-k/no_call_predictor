@@ -12,7 +12,7 @@ This is a demo and **not suitable for clinical or diagnostic purposes**. The und
 
 ## 🚀 Visit the app demo
 
-wasdasda
+https://martin-e-k.github.io/no_call_predictor/
 
 ⚠️ The model included in this app was trained on confidential patient data, which is not part of this repository.
 All sample data and app logic are for demonstration purposes only.
