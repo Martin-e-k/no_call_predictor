@@ -1,6 +1,6 @@
 # No-Call Predictor (Demo)
 
-This project is a demonstration of a predictive model that estimates the likelihood of a test failure (no-call) in a prenatal screening context. The application is intended for exploration and conceptual development — not for clinical use.
+This project is a demonstration of a predictive model that estimates the likelihood of a NIPT test failure (no-call) due to insufficient fetal DNA in the maternal sample. The application is intended for exploration and conceptual development — not for clinical use.
 
 ## 🔍 Purpose
 
