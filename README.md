@@ -6,7 +6,7 @@ This project is a demonstration of a predictive model that estimates the likelih
 
 To showcase how an app might help physicians assess no-call risk based on patient characteristics.
 
-## ⚠️ Disclaimer
+## ⚠️ Disclaimers
 
 This is a demo and **not suitable for clinical or diagnostic purposes**. The underlying model is not validated and should not be used in patient care.
 
@@ -14,6 +14,8 @@ This is a demo and **not suitable for clinical or diagnostic purposes**. The und
 
 wasdasda
 
+⚠️ The model included in this app was trained on confidential patient data, which is not part of this repository.
+All sample data and app logic are for demonstration purposes only.
 
 ## 📄 License
 
