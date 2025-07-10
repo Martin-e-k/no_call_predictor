@@ -21,6 +21,7 @@ prob <- predict(model, newdata = newdata, type = "response")
 
 ui <- fluidPage(
   titlePanel("Likelihood of NIPT test failure due to insufficient fetal fraction"),
+
   
   sidebarLayout(
     sidebarPanel(
@@ -39,7 +40,14 @@ ui <- fluidPage(
     
     mainPanel(
       h3("Predicted Failure Probability"),
-      verbatimTextOutput("prediction_output")
+      verbatimTextOutput("prediction_output"),
+      
+      tags$hr(),
+      
+      tags$div(
+        style = "color: red; font-weight: bold;",
+        "⚠️ Disclaimer: This app is a demo only. The predictions shown are based on a preliminary model and should not be used for clinical decision-making."
+      )
     )
   )
 )
