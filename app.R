@@ -20,7 +20,7 @@ newdata <- data.frame(
 prob <- predict(model, newdata = newdata, type = "response")
 
 ui <- fluidPage(
-  titlePanel("Likelihood of NIPT test failure due to insufficient fetal fraction"),
+  titlePanel("Likelihood of NIPT test failure due to insufficient fraction of fetal dna in maternal bloodstream"),
 
   
   sidebarLayout(
