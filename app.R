@@ -1,51 +1,70 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    https://shiny.posit.co/
-#
+# This is a Shiny app that takes patient information and returns a probabilty that
+# a NIPT test will fail due to low fetal fraction
 
 library(shiny)
 
-# Define UI for application that draws a histogram
-ui <- fluidPage(
+# Load the model
+model <- readRDS("models/glm_smote_demo_model.rds")
 
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
-    )
+# Example: predict from user input
+newdata <- data.frame(
+  BMI = 28,
+  Gatotal = 100,
+  NF = 1.8,
+  HCG = 1.255,
+  PAPPA = 0.755,
+  conception_group = "natural"
 )
 
-# Define server logic required to draw a histogram
-server <- function(input, output) {
+# Make prediction
+prob <- predict(model, newdata = newdata, type = "response")
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
+ui <- fluidPage(
+  titlePanel("Likelihood of NIPT test failure due to insufficient fetal fraction"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      numericInput("BMI", "BMI:", value = 28, min = 10, max = 60),
+      numericInput("Gatotal", "Gestational Age Total (days):", value = 100, min = 70, max = 300),
+      numericInput("NF", "Nuchal Fold (NF):", value = 1.8, min = 0.1, max = 10, step = 0.1),
+      numericInput("HCG", "HCG MoM:", value = 1.255, min = 0.01, max = 10, step = 0.01),
+      numericInput("PAPPA", "PAPP-A MoM:", value = 0.755, min = 0.01, max = 10, step = 0.01),
+      
+      selectInput("conception_group", "Conception Method:",
+                  choices = c("natural", "assisted"),
+                  selected = "natural"),
+      
+      actionButton("predict_btn", "Predict")
+    ),
+    
+    mainPanel(
+      h3("Predicted Failure Probability"),
+      verbatimTextOutput("prediction_output")
+    )
+  )
+)
 
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
+server <- function(input, output, session) {
+  
+  model <- readRDS("models/glm_smote_demo_model.rds")
+  
+  observeEvent(input$predict_btn, {
+    newdata <- data.frame(
+      BMI = input$BMI,
+      Gatotal = input$Gatotal,
+      NF = input$NF,
+      HCG = input$HCG,
+      PAPPA = input$PAPPA,
+      conception_group = input$conception_group
+    )
+    
+    # Make prediction
+    prob <- predict(model, newdata = newdata, type = "response")
+    
+    output$prediction_output <- renderText({
+      paste0("Estimated risk of failure: ", round(prob * 100, 1), "%")
     })
+  })
 }
 
-# Run the application 
-shinyApp(ui = ui, server = server)
+shinyApp(ui, server)
